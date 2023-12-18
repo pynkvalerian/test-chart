@@ -30,7 +30,7 @@ const Chart = () => {
 			.range([marginLeft, width - marginRight])
 			.padding(0.05);
 
-		const y = d3.scaleLinear()
+		const y = d3.scaleLinear([0, Math.max(...earnAndSpend)])
 			.domain([0, Math.max(...earnAndSpend)])
 			.range([height - marginBottom, marginTop]);
 
@@ -40,6 +40,8 @@ const Chart = () => {
 			.range(['#B2FCF1','#C4DCFC'])
 
 		const barBackgroundColor = '#F6F6F6';
+		const barEarnColor = '#B2FCF1';
+		const barSpendColor = '#C4DCFC';
 
 		const barBackgroundColorSelected = '#E2E2E2';
 		const barEarnColorSelected = '#00E5C4';
@@ -146,11 +148,18 @@ const Chart = () => {
 		 */
 		d3.selectAll(".month rect").on("click", (event) => {
 			const month = event.target.parentElement.id;
-			const selectedMonth = d3.select(`#${month}`);
+			
+			// reset all bars to default color
+			const allMonths = d3.selectAll(".month");
+			allMonths.select(".earn").attr("fill", barEarnColor);
+			allMonths.select(".spend").attr("fill", barSpendColor);
+			allMonths.select(".backgroundBar").attr("fill", barBackgroundColor);
 
-			// this does not work yet
+			// set selected month bars to selected color
+			const selectedMonth = d3.selectAll(`#${month}`);
 			selectedMonth.select(".earn").attr("fill", barEarnColorSelected);
 			selectedMonth.select(".spend").attr("fill", barSpendColorSelected);
+			selectedMonth.select(".backgroundBar").attr("fill", barBackgroundColorSelected);
 		})
 
 	}
